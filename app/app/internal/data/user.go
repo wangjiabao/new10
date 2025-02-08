@@ -2442,11 +2442,11 @@ func (ui *UserInfoRepo) UpdateUserNewTwoNewTwo(ctx context.Context, userId int64
 			return errors.New(500, "UPDATE_USER_ERROR", "用户信息修改失败")
 		}
 	} else {
-		res := ui.data.DB(ctx).Table("user").Where("id=?", userId).
-			Updates(map[string]interface{}{"last_biw": last, "amount_biw": gorm.Expr("amount_biw + ?", amount)})
-		if res.Error != nil {
-			return errors.New(500, "UPDATE_USER_ERROR", "用户信息修改失败")
-		}
+		//res := ui.data.DB(ctx).Table("user").Where("id=?", userId).
+		//	Updates(map[string]interface{}{"last_biw": last, "amount_biw": gorm.Expr("amount_biw + ?", amount)})
+		//if res.Error != nil {
+		//	return errors.New(500, "UPDATE_USER_ERROR", "用户信息修改失败")
+		//}
 	}
 
 	return nil
