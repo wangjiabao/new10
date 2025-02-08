@@ -72,13 +72,12 @@ func (a *AppService) Deposit(ctx context.Context, req *v1.DepositRequest) (*v1.D
 
 	for i := 1; i <= 10; i++ {
 		var (
-			depositUsdtResult     map[string]int64
-			notExistDepositResult []*biz.EthUserRecord
-			depositUsers          map[string]*biz.User
-			fromAccount           []string
-			userLength            int64
-			last                  int64
-			err                   error
+			depositUsdtResult map[string]int64
+			depositUsers      map[string]*biz.User
+			fromAccount       []string
+			userLength        int64
+			last              int64
+			err               error
 		)
 
 		last, err = a.ruc.GetEthUserRecordLast(ctx)
@@ -135,7 +134,6 @@ func (a *AppService) Deposit(ctx context.Context, req *v1.DepositRequest) (*v1.D
 		depositUsers, err = a.uuc.GetUserByAddress(ctx, fromAccount...)
 		if nil != depositUsers {
 			// 统计开始
-			notExistDepositResult = make([]*biz.EthUserRecord, 0)
 			for user, v := range depositUsdtResult { // 主查usdt
 				if _, ok := depositUsers[user]; !ok { // 用户不存在
 					continue
@@ -174,16 +172,6 @@ func (a *AppService) Deposit(ctx context.Context, req *v1.DepositRequest) (*v1.D
 					return &v1.DepositReply{}, nil
 				}
 
-				//notExistDepositResult = append(notExistDepositResult, &biz.EthUserRecord{ // 两种币的记录
-				//	UserId:    depositUsers[user].ID,
-				//	Status:    "success",
-				//	Type:      "deposit",
-				//	Amount:    strValue,
-				//	RelAmount: tmpValue,
-				//	CoinType:  "USDT",
-				//	Last:      userLength,
-				//})
-
 				// 充值
 				err = a.ruc.DepositNew(ctx, depositUsers[user].ID, depositUsers[user].Address, uint64(v), 0, &biz.EthUserRecord{ // 两种币的记录
 					UserId:    depositUsers[user].ID,
@@ -192,25 +180,12 @@ func (a *AppService) Deposit(ctx context.Context, req *v1.DepositRequest) (*v1.D
 					Amount:    strValue,
 					RelAmount: tmpValue,
 					CoinType:  "USDT",
+					Last:      userLength,
 				})
 				if nil != err {
 					fmt.Println(err)
 				}
 			}
-
-			_, err = a.ruc.EthUserRecordHandle(ctx, notExistDepositResult...)
-			if nil != err {
-				fmt.Println(err)
-			}
-
-			//var (
-			//	tmpValue int64
-			//	strValue string
-			//)
-			//
-
-			//
-			//continue
 		}
 
 		time.Sleep(5 * time.Second)
