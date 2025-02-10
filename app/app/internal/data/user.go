@@ -2157,7 +2157,7 @@ func (ub *UserBalanceRepo) FourRewardBiw(ctx context.Context, userId int64, rewa
 	}
 
 	var userBalanceRecode UserBalanceRecord
-	userBalanceRecode.Balance = userBalance.BalanceDhb
+	userBalanceRecode.Balance = userBalance.BalanceUsdt
 	userBalanceRecode.UserId = userBalance.UserId
 	userBalanceRecode.Type = "reward"
 	userBalanceRecode.CoinType = "usdt"
