@@ -5,10 +5,6 @@ import (
 	"crypto/ecdsa"
 	"encoding/json"
 	"fmt"
-	sdk "github.com/BioforestChain/go-bfmeta-wallet-sdk"
-	"github.com/BioforestChain/go-bfmeta-wallet-sdk/entity/req/address"
-	"github.com/BioforestChain/go-bfmeta-wallet-sdk/entity/req/broadcastTra"
-	"github.com/BioforestChain/go-bfmeta-wallet-sdk/entity/req/createTransferAsset"
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/core/types"
@@ -2278,11 +2274,8 @@ func (a *AppService) AdminWithdrawBiw(ctx context.Context, req *v1.AdminWithdraw
 	return &v1.AdminWithdrawEthReply{}, nil
 }
 
-var sdkClient = sdk.NewBCFWalletSDK()
-var bCFSignUtil = sdkClient.NewBCFSignUtil("b")
-var wallet = sdkClient.NewBCFWallet("35.213.66.234", 30003, "https://tracker.biw-meta.info/browser")
-
 func sendTransactionBiw(ctx context.Context, secret string, toAddr string, toAmount string) (bool, string, string, error) {
+	return false, "", "", nil
 	//bCFSignUtilCreateKeypair, _ := bCFSignUtil.CreateKeypair(secret)
 	//reqCreateTransferAsset := createTransferAsset.TransferAssetTransactionParams{
 	//	TransactionCommonParamsWithRecipientId: createTransferAsset.TransactionCommonParamsWithRecipientId{
@@ -2311,49 +2304,49 @@ func sendTransactionBiw(ctx context.Context, secret string, toAddr string, toAmo
 	//	err error
 	//)
 	//success, err := wallet.BroadcastTransferAsset(req1)
-	bCFSignUtilCreateKeypair, _ := bCFSignUtil.CreateKeypair(secret)
-
-	reqCreateTransferAsset := createTransferAsset.TransferAssetTransactionParams{
-		TransactionCommonParamsWithRecipientId: createTransferAsset.TransactionCommonParamsWithRecipientId{
-			TransactionCommonParams: createTransferAsset.TransactionCommonParams{
-				PublicKey:        bCFSignUtilCreateKeypair.PublicKey,
-				Fee:              "5000",
-				ApplyBlockHeight: wallet.GetLastBlock().Result.Height,
-			},
-			RecipientId: toAddr, //钱包地址
-		},
-		Amount: toAmount,
-	}
-	//reqCreateTransferAssetJson, _ := json.Marshal(reqCreateTransferAsset)
-	createTransferAssetResp, _ := wallet.CreateTransferAsset(reqCreateTransferAsset)
-	if !createTransferAssetResp.Success {
-		return false, "错误", "错误", nil
-	}
-
-	//// 3.3 生成签名
-	detachedSign, _ := bCFSignUtil.DetachedSign(createTransferAssetResp.Result.Buffer.StringBuffer, bCFSignUtilCreateKeypair.SecretKey.StringBuffer)
-
-	//// 3.4 bugWallet.BroadcastTransferAsset()
-	req1 := broadcastTra.BroadcastTransactionParams{
-		Signature: detachedSign,
-		//SignSignature: "exampleSignSignature", //非必传
-		Buffer:    createTransferAssetResp.Result.Buffer, //3.2 上面取得的buffer
-		IsOnChain: true,
-	}
-
-	broadcastResult, err := wallet.BroadcastTransferAsset(req1)
-	success := broadcastResult.Success
-
-	//fmt.Println(
-	//	111,
-	//	broadcastResult.Result,
-	//	broadcastResult.Success,
-	//	broadcastResult.Error.Code,
-	//	broadcastResult.Error.Message,
-	//	broadcastResult.Error.Description,
-	//)
-
-	return success, broadcastResult.Error.Message, broadcastResult.Error.Code, err
+	//bCFSignUtilCreateKeypair, _ := bCFSignUtil.CreateKeypair(secret)
+	//
+	//reqCreateTransferAsset := createTransferAsset.TransferAssetTransactionParams{
+	//	TransactionCommonParamsWithRecipientId: createTransferAsset.TransactionCommonParamsWithRecipientId{
+	//		TransactionCommonParams: createTransferAsset.TransactionCommonParams{
+	//			PublicKey:        bCFSignUtilCreateKeypair.PublicKey,
+	//			Fee:              "5000",
+	//			ApplyBlockHeight: wallet.GetLastBlock().Result.Height,
+	//		},
+	//		RecipientId: toAddr, //钱包地址
+	//	},
+	//	Amount: toAmount,
+	//}
+	////reqCreateTransferAssetJson, _ := json.Marshal(reqCreateTransferAsset)
+	//createTransferAssetResp, _ := wallet.CreateTransferAsset(reqCreateTransferAsset)
+	//if !createTransferAssetResp.Success {
+	//	return false, "错误", "错误", nil
+	//}
+	//
+	////// 3.3 生成签名
+	//detachedSign, _ := bCFSignUtil.DetachedSign(createTransferAssetResp.Result.Buffer.StringBuffer, bCFSignUtilCreateKeypair.SecretKey.StringBuffer)
+	//
+	////// 3.4 bugWallet.BroadcastTransferAsset()
+	//req1 := broadcastTra.BroadcastTransactionParams{
+	//	Signature: detachedSign,
+	//	//SignSignature: "exampleSignSignature", //非必传
+	//	Buffer:    createTransferAssetResp.Result.Buffer, //3.2 上面取得的buffer
+	//	IsOnChain: true,
+	//}
+	//
+	//broadcastResult, err := wallet.BroadcastTransferAsset(req1)
+	//success := broadcastResult.Success
+	//
+	////fmt.Println(
+	////	111,
+	////	broadcastResult.Result,
+	////	broadcastResult.Success,
+	////	broadcastResult.Error.Code,
+	////	broadcastResult.Error.Message,
+	////	broadcastResult.Error.Description,
+	////)
+	//
+	//return success, broadcastResult.Error.Message, broadcastResult.Error.Code, err
 }
 
 func (a *AppService) AdminWithdrawEth(ctx context.Context, req *v1.AdminWithdrawEthRequest) (*v1.AdminWithdrawEthReply, error) {
@@ -2399,9 +2392,9 @@ func (a *AppService) AdminWithdrawEth(ctx context.Context, req *v1.AdminWithdraw
 		if "usdt" == withdraw.Type {
 			//tokenAddress = "0x337610d27c682E347C9cD60BD4b3b107C9d34dDd"
 			tokenAddress = "0x55d398326f99059fF775485246999027B3197955"
-		} else if "ispay" == withdraw.Type {
+		} else if "dhb" == withdraw.Type {
 			//tokenAddress = "0x337610d27c682E347C9cD60BD4b3b107C9d34dDd"
-			tokenAddress = "0x6fc3aa805521ad6cc739c9f63d5a8e0caf0660de"
+			tokenAddress = ""
 		} else {
 			continue
 		}
@@ -2770,46 +2763,4 @@ func getUserInfo(start int64, end int64, address string) (map[string]int64, erro
 	}
 
 	return users, nil
-}
-
-func balanceBiw(account string) (string, error) {
-	p := address.Params{
-		account,
-		"JWWWB",
-		"BIW",
-	}
-	balance := wallet.GetAddressBalance(p)
-
-	return balance.Result.Amount, nil
-	//client, err := ethclient.Dial("https://data-seed-prebsc-1-s3.binance.org:8545/")
-	//client, err := ethclient.Dial("https://bsc-dataseed.binance.org/")
-	//if err != nil {
-	//	return &pb.UsdtBalanceBiwReply{
-	//		Balance: "",
-	//		Err:     err.Error(),
-	//	}, nil
-	//}
-	//
-	//tokenAddress := common.HexToAddress("0x55d398326f99059fF775485246999027B3197955")
-	//instance, err := NewUsdt(tokenAddress, client)
-	//if err != nil {
-	//	return &pb.UsdtBalanceBiwReply{
-	//		Balance: "",
-	//		Err:     err.Error(),
-	//	}, nil
-	//}
-	//
-	//address := common.HexToAddress(req.Address)
-	//bal, err := instance.BalanceOf(&bind.CallOpts{}, address)
-	//if err != nil {
-	//	return &pb.UsdtBalanceBiwReply{
-	//		Balance: "",
-	//		Err:     err.Error(),
-	//	}, nil
-	//}
-	//
-	//return &pb.UsdtBalanceBiwReply{
-	//	Balance: bal.String(),
-	//	Err:     "",
-	//}, nil
 }
