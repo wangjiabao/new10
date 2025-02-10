@@ -2358,7 +2358,7 @@ func (ub *UserBalanceRepo) RecommendRewardBiw(ctx context.Context, userId int64,
 	var err error
 	if err = ub.data.DB(ctx).Table("user_balance").
 		Where("user_id=?", userId).
-		Updates(map[string]interface{}{"balance_dhb": gorm.Expr("balance_dhb + ?", rewardAmount), "recommend_total": gorm.Expr("recommend_total + ?", rewardAmount)}).Error; nil != err {
+		Updates(map[string]interface{}{"balance_usdt": gorm.Expr("balance_usdt + ?", rewardAmount), "recommend_total": gorm.Expr("recommend_total + ?", rewardAmount)}).Error; nil != err {
 		return 0, errors.NotFound("user balance err", "user balance not found")
 	}
 
@@ -2407,10 +2407,10 @@ func (ub *UserBalanceRepo) RecommendRewardBiw(ctx context.Context, userId int64,
 	//}
 
 	var userBalanceRecode UserBalanceRecord
-	userBalanceRecode.Balance = userBalance.BalanceDhb
+	userBalanceRecode.Balance = userBalance.BalanceUsdt
 	userBalanceRecode.UserId = userBalance.UserId
 	userBalanceRecode.Type = "reward"
-	userBalanceRecode.CoinType = "dhb"
+	userBalanceRecode.CoinType = "usdt"
 	userBalanceRecode.Amount = rewardAmount
 	err = ub.data.DB(ctx).Table("user_balance_record").Create(&userBalanceRecode).Error
 	if err != nil {
@@ -2536,7 +2536,7 @@ func (ub *UserBalanceRepo) LocationRewardBiw(ctx context.Context, userId int64, 
 	var err error
 	if err = ub.data.DB(ctx).Table("user_balance").
 		Where("user_id=?", userId).
-		Updates(map[string]interface{}{"balance_dhb": gorm.Expr("balance_dhb + ?", rewardAmount), "location_total": gorm.Expr("location_total + ?", rewardAmount)}).Error; nil != err {
+		Updates(map[string]interface{}{"balance_usdt": gorm.Expr("balance_usdt + ?", rewardAmount), "location_total": gorm.Expr("location_total + ?", rewardAmount)}).Error; nil != err {
 		return 0, errors.NotFound("user balance err", "user balance not found")
 	}
 
@@ -2585,10 +2585,10 @@ func (ub *UserBalanceRepo) LocationRewardBiw(ctx context.Context, userId int64, 
 	//}
 
 	var userBalanceRecode UserBalanceRecord
-	userBalanceRecode.Balance = userBalance.BalanceDhb
+	userBalanceRecode.Balance = userBalance.BalanceUsdt
 	userBalanceRecode.UserId = userBalance.UserId
 	userBalanceRecode.Type = "reward"
-	userBalanceRecode.CoinType = "dhb"
+	userBalanceRecode.CoinType = "usdt"
 	userBalanceRecode.Amount = rewardAmount
 	err = ub.data.DB(ctx).Table("user_balance_record").Create(&userBalanceRecode).Error
 	if err != nil {
@@ -2679,7 +2679,7 @@ func (ub *UserBalanceRepo) AreaRewardBiw(ctx context.Context, userId int64, rewa
 	var err error
 	if err = ub.data.DB(ctx).Table("user_balance").
 		Where("user_id=?", userId).
-		Updates(map[string]interface{}{"balance_dhb": gorm.Expr("balance_dhb + ?", rewardAmount), "area_total": gorm.Expr("area_total + ?", rewardAmount)}).Error; nil != err {
+		Updates(map[string]interface{}{"balance_usdt": gorm.Expr("balance_usdt + ?", tmpCurrentReward), "area_total": gorm.Expr("area_total + ?", tmpCurrentReward)}).Error; nil != err {
 		return 0, errors.NotFound("user balance err", "user balance not found")
 	}
 
@@ -2728,11 +2728,11 @@ func (ub *UserBalanceRepo) AreaRewardBiw(ctx context.Context, userId int64, rewa
 	//}
 
 	var userBalanceRecode UserBalanceRecord
-	userBalanceRecode.Balance = tmpCurrentReward
+	userBalanceRecode.Balance = rewardAmount
 	userBalanceRecode.UserId = userBalance.UserId
 	userBalanceRecode.Type = "reward"
-	userBalanceRecode.CoinType = "dhb"
-	userBalanceRecode.Amount = rewardAmount
+	userBalanceRecode.CoinType = "usdt"
+	userBalanceRecode.Amount = tmpCurrentReward
 	err = ub.data.DB(ctx).Table("user_balance_record").Create(&userBalanceRecode).Error
 	if err != nil {
 		return 0, err
@@ -2740,7 +2740,7 @@ func (ub *UserBalanceRepo) AreaRewardBiw(ctx context.Context, userId int64, rewa
 
 	var reward Reward
 	reward.UserId = userBalance.UserId
-	reward.Amount = rewardAmount
+	reward.Amount = tmpCurrentReward
 	reward.BalanceRecordId = userBalanceRecode.ID
 	reward.Type = "system_reward_area_daily" // 本次分红的行为类型
 	reward.Reason = "area"                   // 给我分红的理由

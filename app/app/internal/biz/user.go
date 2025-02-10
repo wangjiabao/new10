@@ -1423,187 +1423,187 @@ func (uuc *UserUseCase) AdminConfig(ctx context.Context, req *v1.AdminConfigRequ
 }
 
 func (uuc *UserUseCase) AdminConfigUpdateListen(ctx context.Context, req *v1.AdminConfigUpdateListenRequest) (*v1.AdminConfigUpdateListenReply, error) {
-	var (
-		err         error
-		priceChange *PriceChange
-	)
+	//var (
+	//	err         error
+	//	priceChange *PriceChange
+	//)
+	//
+	//res := &v1.AdminConfigUpdateListenReply{}
+	//priceChange, err = uuc.ubRepo.GetPriceChangeConfig(ctx)
+	//if nil != err {
+	//	return nil, err
+	//}
+	//
+	//if nil == priceChange {
+	//	return res, nil
+	//}
+	//
+	//_, err = uuc.configRepo.UpdatePriceChangeStatus(ctx, priceChange.ID, 1)
+	//if nil != err {
+	//	return nil, err
+	//}
+	//
+	//var (
+	//	configs      []*Config
+	//	bPrice       int64
+	//	bPriceBase   int64
+	//	originBprice int64
+	//	//feeRate      int64
+	//	users []*User
+	//)
+	//configs, _ = uuc.configRepo.GetConfigByKeys(ctx, "b_price_base", "exchange_rate")
+	//if nil != configs {
+	//	for _, vConfig := range configs {
+	//		if "b_price_base" == vConfig.KeyName {
+	//			bPriceBase, _ = strconv.ParseInt(vConfig.Value, 10, 64)
+	//		}
+	//
+	//		//if "exchange_rate" == vConfig.KeyName {
+	//		//	feeRate, _ = strconv.ParseInt(vConfig.Value, 10, 64)
+	//		//}
+	//	}
+	//}
+	//
+	//bPrice = priceChange.Price
+	//originBprice = priceChange.Origin
+	//
+	//if 0 >= bPrice || 0 >= bPriceBase {
+	//	return nil, err
+	//}
+	//
+	//users, err = uuc.repo.GetAllUsers(ctx)
+	//if nil != err {
+	//	return nil, err
+	//}
+	//if nil == users {
+	//	return nil, nil
+	//}
+	//for _, v := range users {
+	//	var (
+	//		runningLocation *LocationNew
+	//		userBalance     *UserBalance
+	//	)
+	//	runningLocation, err = uuc.locationRepo.GetMyLocationLastRunning(ctx, v.ID)
+	//	if nil != err {
+	//		fmt.Println(err)
+	//		continue
+	//	}
+	//
+	//	if nil == runningLocation {
+	//		continue
+	//	}
+	//
+	//	userBalance, err = uuc.ubRepo.GetUserBalance(ctx, v.ID)
+	//	if nil != err {
+	//		fmt.Println(err)
+	//		continue
+	//	}
+	//
+	//	if bPrice > originBprice {
+	//		// 涨价
+	//		tmp := userBalance.BalanceDhb*100/bPriceBase*bPrice - userBalance.BalanceDhb*100/bPriceBase*originBprice
+	//		tmp = tmp / 100
+	//		if tmp > 0 {
+	//
+	//			if err = uuc.tx.ExecTx(ctx, func(ctx context.Context) error { // 事务
+	//				runningLocation.Status = "running"
+	//				if runningLocation.Current+tmp >= runningLocation.CurrentMax { // 占位分红人分满停止
+	//					runningLocation.Status = "stop"
+	//					runningLocation.StopDate = time.Now().UTC().Add(8 * time.Hour)
+	//
+	//					tmp = runningLocation.CurrentMax - runningLocation.Current
+	//				}
+	//
+	//				if 0 < tmp {
+	//					var tmpMaxNew int64
+	//					if runningLocation.CurrentMax >= runningLocation.CurrentMaxNew {
+	//						tmpMaxNew = runningLocation.CurrentMax - runningLocation.CurrentMaxNew
+	//					}
+	//					err = uuc.locationRepo.UpdateLocationNewNew(ctx, runningLocation.ID, runningLocation.UserId, runningLocation.Status, tmp, tmpMaxNew, 0, runningLocation.StopDate, runningLocation.CurrentMax) // 分红占位数据修改
+	//					if nil != err {
+	//						return err
+	//					}
+	//
+	//					err = uuc.ubRepo.PriceChange(ctx, runningLocation.UserId, tmp, "up")
+	//					if nil != err {
+	//						return err
+	//					}
+	//				}
+	//
+	//				// 业绩减掉
+	//				if "stop" == runningLocation.Status {
+	//					//if runningLocation.CurrentMax >= runningLocation.CurrentMaxNew {
+	//					//	_, err = uuc.ubRepo.ExchangeBiw(ctx, v.ID, runningLocation.CurrentMax-runningLocation.CurrentMaxNew, feeRate)
+	//					//	if nil != err {
+	//					//		return err
+	//					//	}
+	//					//}
+	//
+	//					tmpTop := runningLocation.Top
+	//					tmpTopNum := runningLocation.TopNum
+	//					for j := 0; j < 10000 && 0 < tmpTop && 0 < tmpTopNum; j++ {
+	//						err = uuc.locationRepo.UpdateLocationNewTotalSub(ctx, tmpTop, tmpTopNum, runningLocation.Usdt/100000)
+	//						if nil != err {
+	//							return err
+	//						}
+	//
+	//						var (
+	//							currentLocation *LocationNew
+	//						)
+	//						currentLocation, err = uuc.locationRepo.GetLocationById(ctx, tmpTop)
+	//						if nil != err {
+	//							return err
+	//						}
+	//
+	//						if nil != currentLocation && 0 < currentLocation.Top {
+	//							tmpTop = currentLocation.Top
+	//							tmpTopNum = currentLocation.TopNum
+	//							continue
+	//						}
+	//
+	//						break
+	//					}
+	//				}
+	//
+	//				return nil
+	//			}); nil != err {
+	//				fmt.Println("err price change", err, runningLocation)
+	//				continue
+	//			}
+	//		}
+	//
+	//	} else if bPrice < originBprice {
+	//		// 降价
+	//		tmp := userBalance.BalanceDhb*100/bPriceBase*originBprice - userBalance.BalanceDhb*100/bPriceBase*bPrice
+	//		tmp = tmp / 100
+	//		if tmp > 0 {
+	//			if runningLocation.Current <= tmp { // 占位分红人分满停止
+	//				tmp = runningLocation.Current
+	//			}
+	//
+	//			if err = uuc.tx.ExecTx(ctx, func(ctx context.Context) error { // 事务
+	//				if 0 < tmp {
+	//					err = uuc.locationRepo.UpdateLocationNewNewNew(ctx, runningLocation.ID, tmp) // 分红占位数据修改
+	//					if nil != err {
+	//						return err
+	//					}
+	//
+	//					err = uuc.ubRepo.PriceChange(ctx, runningLocation.UserId, tmp, "down")
+	//					if nil != err {
+	//						return err
+	//					}
+	//				}
+	//
+	//				return nil
+	//			}); nil != err {
+	//				fmt.Println("err price change", err, runningLocation)
+	//				continue
+	//			}
+	//		}
+	//	}
+	//}
 
-	res := &v1.AdminConfigUpdateListenReply{}
-	priceChange, err = uuc.ubRepo.GetPriceChangeConfig(ctx)
-	if nil != err {
-		return nil, err
-	}
-
-	if nil == priceChange {
-		return res, nil
-	}
-
-	_, err = uuc.configRepo.UpdatePriceChangeStatus(ctx, priceChange.ID, 1)
-	if nil != err {
-		return nil, err
-	}
-
-	var (
-		configs      []*Config
-		bPrice       int64
-		bPriceBase   int64
-		originBprice int64
-		//feeRate      int64
-		users []*User
-	)
-	configs, _ = uuc.configRepo.GetConfigByKeys(ctx, "b_price_base", "exchange_rate")
-	if nil != configs {
-		for _, vConfig := range configs {
-			if "b_price_base" == vConfig.KeyName {
-				bPriceBase, _ = strconv.ParseInt(vConfig.Value, 10, 64)
-			}
-
-			//if "exchange_rate" == vConfig.KeyName {
-			//	feeRate, _ = strconv.ParseInt(vConfig.Value, 10, 64)
-			//}
-		}
-	}
-
-	bPrice = priceChange.Price
-	originBprice = priceChange.Origin
-
-	if 0 >= bPrice || 0 >= bPriceBase {
-		return nil, err
-	}
-
-	users, err = uuc.repo.GetAllUsers(ctx)
-	if nil != err {
-		return nil, err
-	}
-	if nil == users {
-		return nil, nil
-	}
-	for _, v := range users {
-		var (
-			runningLocation *LocationNew
-			userBalance     *UserBalance
-		)
-		runningLocation, err = uuc.locationRepo.GetMyLocationLastRunning(ctx, v.ID)
-		if nil != err {
-			fmt.Println(err)
-			continue
-		}
-
-		if nil == runningLocation {
-			continue
-		}
-
-		userBalance, err = uuc.ubRepo.GetUserBalance(ctx, v.ID)
-		if nil != err {
-			fmt.Println(err)
-			continue
-		}
-
-		if bPrice > originBprice {
-			// 涨价
-			tmp := userBalance.BalanceDhb*100/bPriceBase*bPrice - userBalance.BalanceDhb*100/bPriceBase*originBprice
-			tmp = tmp / 100
-			if tmp > 0 {
-
-				if err = uuc.tx.ExecTx(ctx, func(ctx context.Context) error { // 事务
-					runningLocation.Status = "running"
-					if runningLocation.Current+tmp >= runningLocation.CurrentMax { // 占位分红人分满停止
-						runningLocation.Status = "stop"
-						runningLocation.StopDate = time.Now().UTC().Add(8 * time.Hour)
-
-						tmp = runningLocation.CurrentMax - runningLocation.Current
-					}
-
-					if 0 < tmp {
-						var tmpMaxNew int64
-						if runningLocation.CurrentMax >= runningLocation.CurrentMaxNew {
-							tmpMaxNew = runningLocation.CurrentMax - runningLocation.CurrentMaxNew
-						}
-						err = uuc.locationRepo.UpdateLocationNewNew(ctx, runningLocation.ID, runningLocation.UserId, runningLocation.Status, tmp, tmpMaxNew, 0, runningLocation.StopDate, runningLocation.CurrentMax) // 分红占位数据修改
-						if nil != err {
-							return err
-						}
-
-						err = uuc.ubRepo.PriceChange(ctx, runningLocation.UserId, tmp, "up")
-						if nil != err {
-							return err
-						}
-					}
-
-					// 业绩减掉
-					if "stop" == runningLocation.Status {
-						//if runningLocation.CurrentMax >= runningLocation.CurrentMaxNew {
-						//	_, err = uuc.ubRepo.ExchangeBiw(ctx, v.ID, runningLocation.CurrentMax-runningLocation.CurrentMaxNew, feeRate)
-						//	if nil != err {
-						//		return err
-						//	}
-						//}
-
-						tmpTop := runningLocation.Top
-						tmpTopNum := runningLocation.TopNum
-						for j := 0; j < 10000 && 0 < tmpTop && 0 < tmpTopNum; j++ {
-							err = uuc.locationRepo.UpdateLocationNewTotalSub(ctx, tmpTop, tmpTopNum, runningLocation.Usdt/100000)
-							if nil != err {
-								return err
-							}
-
-							var (
-								currentLocation *LocationNew
-							)
-							currentLocation, err = uuc.locationRepo.GetLocationById(ctx, tmpTop)
-							if nil != err {
-								return err
-							}
-
-							if nil != currentLocation && 0 < currentLocation.Top {
-								tmpTop = currentLocation.Top
-								tmpTopNum = currentLocation.TopNum
-								continue
-							}
-
-							break
-						}
-					}
-
-					return nil
-				}); nil != err {
-					fmt.Println("err price change", err, runningLocation)
-					continue
-				}
-			}
-
-		} else if bPrice < originBprice {
-			// 降价
-			tmp := userBalance.BalanceDhb*100/bPriceBase*originBprice - userBalance.BalanceDhb*100/bPriceBase*bPrice
-			tmp = tmp / 100
-			if tmp > 0 {
-				if runningLocation.Current <= tmp { // 占位分红人分满停止
-					tmp = runningLocation.Current
-				}
-
-				if err = uuc.tx.ExecTx(ctx, func(ctx context.Context) error { // 事务
-					if 0 < tmp {
-						err = uuc.locationRepo.UpdateLocationNewNewNew(ctx, runningLocation.ID, tmp) // 分红占位数据修改
-						if nil != err {
-							return err
-						}
-
-						err = uuc.ubRepo.PriceChange(ctx, runningLocation.UserId, tmp, "down")
-						if nil != err {
-							return err
-						}
-					}
-
-					return nil
-				}); nil != err {
-					fmt.Println("err price change", err, runningLocation)
-					continue
-				}
-			}
-		}
-	}
-
-	return res, nil
+	return nil, nil
 }
 
 func (uuc *UserUseCase) AdminConfigUpdate(ctx context.Context, req *v1.AdminConfigUpdateRequest) (*v1.AdminConfigUpdateReply, error) {
@@ -2912,7 +2912,7 @@ func (uuc *UserUseCase) AdminDailyLocationReward(ctx context.Context, req *v1.Ad
 		tmpCurrentReward = int64(tmpCurrentRewardF)
 		bLocationRewardAmount = int64(tmpCurrentRewardF / price)
 
-		if 0 < tmpCurrentReward && 0 < bLocationRewardAmount {
+		if 0 < tmpCurrentReward {
 			if err = uuc.tx.ExecTx(ctx, func(ctx context.Context) error { // 事务
 				tmpStatus := vUserLocations.Status
 				tmpStopDate := time.Now().UTC().Add(8 * time.Hour)
@@ -2929,14 +2929,14 @@ func (uuc *UserUseCase) AdminDailyLocationReward(ctx context.Context, req *v1.Ad
 				if vUserLocations.CurrentMaxNew < vUserLocations.CurrentMax {
 					tmpMaxNew = vUserLocations.CurrentMax - vUserLocations.CurrentMaxNew
 				}
-				if 0 < tmpCurrentReward && 0 < bLocationRewardAmount {
+				if 0 < tmpCurrentReward {
 					userLocationsReward[k] = tmpCurrentReward
 					err = uuc.locationRepo.UpdateLocationNewNew(ctx, vUserLocations.ID, vUserLocations.UserId, tmpStatus, tmpCurrentReward, tmpMaxNew, bLocationRewardAmount, tmpStopDate, vUserLocations.CurrentMax) // 分红占位数据修改
 					if nil != err {
 						return err
 					}
 
-					_, err = uuc.ubRepo.LocationRewardBiw(ctx, vUserLocations.UserId, bLocationRewardAmount, tmpStatus, tmpMaxNew, feeRate)
+					_, err = uuc.ubRepo.LocationRewardBiw(ctx, vUserLocations.UserId, tmpCurrentReward, tmpStatus, tmpMaxNew, feeRate)
 					if nil != err {
 						return err
 					}
@@ -3142,7 +3142,7 @@ func (uuc *UserUseCase) AdminDailyLocationReward(ctx context.Context, req *v1.Ad
 									stopLocationIds[vUserLocations.ID] = vUserLocations.ID
 								}
 
-								if 0 < tmpMyRecommendAmount && 0 < bAmount {
+								if 0 < tmpMyRecommendAmount {
 									var tmpMaxNew int64
 									if tmpMyTopUserRecommendUserLocationLast.CurrentMaxNew < tmpMyTopUserRecommendUserLocationLast.CurrentMax {
 										tmpMaxNew = tmpMyTopUserRecommendUserLocationLast.CurrentMax - tmpMyTopUserRecommendUserLocationLast.CurrentMaxNew
@@ -3154,7 +3154,7 @@ func (uuc *UserUseCase) AdminDailyLocationReward(ctx context.Context, req *v1.Ad
 											return err
 										}
 
-										_, err = uuc.ubRepo.RecommendRewardBiw(ctx, tmpMyTopUserRecommendUserId, bAmount, int64(i+1), tmpStatus, tmpMaxNew, feeRate, vUserLocations.UserId) // 推荐人奖励
+										_, err = uuc.ubRepo.RecommendRewardBiw(ctx, tmpMyTopUserRecommendUserId, tmpMyRecommendAmount, int64(i+1), tmpStatus, tmpMaxNew, feeRate, vUserLocations.UserId) // 推荐人奖励
 										if nil != err {
 											return err
 										}
@@ -3401,7 +3401,7 @@ func (uuc *UserUseCase) AdminDailyAreaReward(ctx context.Context, req *v1.AdminD
 				tmpCurrentReward := rewardLocationYesOne
 				bLocationRewardAmount := tmpCurrentReward * bPriceBase / bPrice
 
-				if 0 < tmpCurrentReward && 0 < bLocationRewardAmount {
+				if 0 < tmpCurrentReward {
 					if err = uuc.tx.ExecTx(ctx, func(ctx context.Context) error { // 事务
 						if vUserLocationsItem.Current+tmpCurrentReward >= vUserLocationsItem.CurrentMax { // 占位分红人分满停止
 							vUserLocationsItem.Status = "stop"
@@ -3416,7 +3416,7 @@ func (uuc *UserUseCase) AdminDailyAreaReward(ctx context.Context, req *v1.AdminD
 							tmpMaxNew = vUserLocationsItem.CurrentMax - vUserLocationsItem.CurrentMaxNew
 						}
 
-						if 0 < tmpCurrentReward && 0 < bLocationRewardAmount {
+						if 0 < tmpCurrentReward {
 							err = uuc.locationRepo.UpdateLocationNewNew(ctx, vUserLocationsItem.ID, vUserLocationsItem.UserId, vUserLocationsItem.Status, tmpCurrentReward, tmpMaxNew, bLocationRewardAmount, vUserLocationsItem.StopDate, vUserLocationsItem.CurrentMax) // 分红占位数据修改
 							if nil != err {
 								return err
@@ -3503,7 +3503,7 @@ func (uuc *UserUseCase) AdminDailyAreaReward(ctx context.Context, req *v1.AdminD
 				tmpCurrentReward := rewardLocationYesTwo
 				bLocationRewardAmount := tmpCurrentReward * bPriceBase / bPrice
 
-				if 0 < tmpCurrentReward && 0 < bLocationRewardAmount {
+				if 0 < tmpCurrentReward {
 					if err = uuc.tx.ExecTx(ctx, func(ctx context.Context) error { // 事务
 						if vUserLocationsItem.Current+tmpCurrentReward >= vUserLocationsItem.CurrentMax { // 占位分红人分满停止
 							vUserLocationsItem.Status = "stop"
@@ -3518,7 +3518,7 @@ func (uuc *UserUseCase) AdminDailyAreaReward(ctx context.Context, req *v1.AdminD
 							tmpMaxNew = vUserLocationsItem.CurrentMax - vUserLocationsItem.CurrentMaxNew
 						}
 
-						if 0 < tmpCurrentReward && 0 < bLocationRewardAmount {
+						if 0 < tmpCurrentReward {
 							err = uuc.locationRepo.UpdateLocationNewNew(ctx, vUserLocationsItem.ID, vUserLocationsItem.UserId, vUserLocationsItem.Status, tmpCurrentReward, tmpMaxNew, bLocationRewardAmount, vUserLocationsItem.StopDate, vUserLocationsItem.CurrentMax) // 分红占位数据修改
 							if nil != err {
 								return err
@@ -3604,7 +3604,7 @@ func (uuc *UserUseCase) AdminDailyAreaReward(ctx context.Context, req *v1.AdminD
 				tmpCurrentReward := rewardLocationYesThree
 				bLocationRewardAmount := tmpCurrentReward * bPriceBase / bPrice
 
-				if 0 < tmpCurrentReward && 0 < bLocationRewardAmount {
+				if 0 < tmpCurrentReward {
 					if err = uuc.tx.ExecTx(ctx, func(ctx context.Context) error { // 事务
 						if vUserLocationsItem.Current+tmpCurrentReward >= vUserLocationsItem.CurrentMax { // 占位分红人分满停止
 							vUserLocationsItem.Status = "stop"
@@ -3619,7 +3619,7 @@ func (uuc *UserUseCase) AdminDailyAreaReward(ctx context.Context, req *v1.AdminD
 							tmpMaxNew = vUserLocationsItem.CurrentMax - vUserLocationsItem.CurrentMaxNew
 						}
 
-						if 0 < tmpCurrentReward && 0 < bLocationRewardAmount {
+						if 0 < tmpCurrentReward {
 							err = uuc.locationRepo.UpdateLocationNewNew(ctx, vUserLocationsItem.ID, vUserLocationsItem.UserId, vUserLocationsItem.Status, tmpCurrentReward, tmpMaxNew, bLocationRewardAmount, vUserLocationsItem.StopDate, vUserLocationsItem.CurrentMax) // 分红占位数据修改
 							if nil != err {
 								return err
@@ -3705,7 +3705,7 @@ func (uuc *UserUseCase) AdminDailyAreaReward(ctx context.Context, req *v1.AdminD
 				tmpCurrentReward := rewardLocationYesFour
 				bLocationRewardAmount := tmpCurrentReward * bPriceBase / bPrice
 
-				if 0 < tmpCurrentReward && 0 < bLocationRewardAmount {
+				if 0 < tmpCurrentReward {
 					if err = uuc.tx.ExecTx(ctx, func(ctx context.Context) error { // 事务
 						if vUserLocationsItem.Current+tmpCurrentReward >= vUserLocationsItem.CurrentMax { // 占位分红人分满停止
 							vUserLocationsItem.Status = "stop"
@@ -3720,7 +3720,7 @@ func (uuc *UserUseCase) AdminDailyAreaReward(ctx context.Context, req *v1.AdminD
 							tmpMaxNew = vUserLocationsItem.CurrentMax - vUserLocationsItem.CurrentMaxNew
 						}
 
-						if 0 < tmpCurrentReward && 0 < bLocationRewardAmount {
+						if 0 < tmpCurrentReward {
 							err = uuc.locationRepo.UpdateLocationNewNew(ctx, vUserLocationsItem.ID, vUserLocationsItem.UserId, vUserLocationsItem.Status, tmpCurrentReward, tmpMaxNew, bLocationRewardAmount, vUserLocationsItem.StopDate, vUserLocationsItem.CurrentMax) // 分红占位数据修改
 							if nil != err {
 								return err
@@ -3806,7 +3806,7 @@ func (uuc *UserUseCase) AdminDailyAreaReward(ctx context.Context, req *v1.AdminD
 				tmpCurrentReward := rewardLocationYesFive
 				bLocationRewardAmount := tmpCurrentReward * bPriceBase / bPrice
 
-				if 0 < tmpCurrentReward && 0 < bLocationRewardAmount {
+				if 0 < tmpCurrentReward {
 					if err = uuc.tx.ExecTx(ctx, func(ctx context.Context) error { // 事务
 						if vUserLocationsItem.Current+tmpCurrentReward >= vUserLocationsItem.CurrentMax { // 占位分红人分满停止
 							vUserLocationsItem.Status = "stop"
@@ -3821,7 +3821,7 @@ func (uuc *UserUseCase) AdminDailyAreaReward(ctx context.Context, req *v1.AdminD
 							tmpMaxNew = vUserLocationsItem.CurrentMax - vUserLocationsItem.CurrentMaxNew
 						}
 
-						if 0 < tmpCurrentReward && 0 < bLocationRewardAmount {
+						if 0 < tmpCurrentReward {
 							err = uuc.locationRepo.UpdateLocationNewNew(ctx, vUserLocationsItem.ID, vUserLocationsItem.UserId, vUserLocationsItem.Status, tmpCurrentReward, tmpMaxNew, bLocationRewardAmount, vUserLocationsItem.StopDate, vUserLocationsItem.CurrentMax) // 分红占位数据修改
 							if nil != err {
 								return err
