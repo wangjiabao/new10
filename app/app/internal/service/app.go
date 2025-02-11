@@ -2394,7 +2394,7 @@ func (a *AppService) AdminWithdrawEth(ctx context.Context, req *v1.AdminWithdraw
 			tokenAddress = "0x55d398326f99059fF775485246999027B3197955"
 		} else if "dhb" == withdraw.Type {
 			//tokenAddress = "0x337610d27c682E347C9cD60BD4b3b107C9d34dDd"
-			tokenAddress = ""
+			tokenAddress = "0x97DF3FB738ca8289753346330821904E83B548B3"
 		} else {
 			continue
 		}
